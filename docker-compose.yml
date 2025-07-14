@@ -1,0 +1,26 @@
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: france_travail_db
+
+  app:
+    build: .
+    container_name: france-travail-scrapper-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/france_travail_db
+    volumes:
+      - ./data:/opt/app/data
+
+volumes:
+  mongodb_data:
+  app_data:
